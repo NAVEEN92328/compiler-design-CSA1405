@@ -1,0 +1,22 @@
+%{
+#include <stdio.h>
+#include <stdlib.h>
+%}
+
+%%
+[0-9]+              { printf("Number: %s\n", yytext); }  // Match numbers
+"+"                 { printf("Operator: +\n"); }          // Addition
+"-"                 { printf("Operator: -\n"); }          // Subtraction
+"*"                 { printf("Operator: *\n"); }          // Multiplication
+"/"                 { printf("Operator: /\n"); }          // Division
+[ \t\n]+            { /* Ignore spaces, tabs, and newlines */ }  // Ignore whitespace
+.                   { printf("Other: %s\n", yytext); }    // Catch all other characters
+%%
+
+int yywrap(void) { return 1; }
+
+int main() {
+    printf("Enter the input (Ctrl+D to end):\n");
+    yylex();  // Start lexing
+    return 0;
+}

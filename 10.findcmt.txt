@@ -1,0 +1,17 @@
+%{
+#include <stdio.h>
+%}
+
+%%
+\/\/[^\n]*          { printf("Single-line comment: %s\n", yytext); }  // Match single-line comments (// ...)
+\/\*([^*]|\*+[^*/])*\*+\/ { printf("Multi-line comment: %s\n", yytext); } // Match multi-line comments (/* ... */)
+.|\n                { /* Ignore all other characters */ }  // Ignore non-comment characters
+%%
+
+int yywrap(void) { return 1; }
+
+int main() {
+    printf("Enter the input (Ctrl+D to end):\n");
+    yylex();  // Start processing input
+    return 0;
+}

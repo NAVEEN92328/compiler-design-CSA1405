@@ -1,0 +1,27 @@
+%{
+#include <stdio.h>
+int comment_count = 0; // Variable to count comment lines
+%}
+
+%%
+\/\/[^\n]*          { comment_count++; } // Match single-line comments starting with //
+\/\*([^*]|\*+[^*/])*\*+\/ {              // Match multi-line comments starting with /* and ending with */
+    const char* ptr = yytext;
+    while (*ptr) {                       // Count newline characters in multi-line comments
+        if (*ptr == '\n') {
+            comment_count++;
+        }
+        ptr++;
+    }
+}
+.|\n                { /* Ignore other characters and lines */ }
+%%
+
+int yywrap(void) { return 1; }
+
+int main() {
+    printf("Enter the input (Ctrl+D to end):\n");
+    yylex();
+    printf("Number of comment lines: %d\n", comment_count);
+    return 0;
+}

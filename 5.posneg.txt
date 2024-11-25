@@ -1,0 +1,21 @@
+%{
+#include <stdio.h>
+int positive_count = 0;
+int negative_count = 0;
+%}
+
+%%
+[0-9]+      { positive_count++; }  // Match positive numbers
+-[0-9]+     { negative_count++; }  // Match negative numbers
+.|\n        { /* Ignore everything else */ }
+%%
+
+int yywrap(void) { return 1; }
+
+int main() {
+    printf("Enter the numbers (end with Ctrl+D):\n");
+    yylex();
+    printf("Positive numbers: %d\n", positive_count);
+    printf("Negative numbers: %d\n", negative_count);
+    return 0;
+}

@@ -1,0 +1,56 @@
+%{
+#include <stdio.h>
+
+/* Counters for each type of constant */
+int int_constants = 0;
+int float_constants = 0;
+int char_constants = 0;
+int string_literals = 0;
+%}
+
+%option noyywrap
+
+/* Patterns for constants */
+INTEGER_CONSTANT      [0-9]+
+FLOAT_CONSTANT        [0-9]+\.[0-9]+
+CHAR_CONSTANT         \'.\'
+STRING_LITERAL        \"[^\"]*\"
+
+%%
+
+{INTEGER_CONSTANT}    { 
+                        int_constants++; 
+                        printf("Integer Constant: %s\n", yytext); 
+                      }
+
+{FLOAT_CONSTANT}      { 
+                        float_constants++; 
+                        printf("Floating-Point Constant: %s\n", yytext); 
+                      }
+
+{CHAR_CONSTANT}       { 
+                        char_constants++; 
+                        printf("Character Constant: %s\n", yytext); 
+                      }
+
+{STRING_LITERAL}      { 
+                        string_literals++; 
+                        printf("String Literal: %s\n", yytext); 
+                      }
+
+[ \t\n]+              { /* Ignore whitespace */ }
+
+.                     { /* Ignore other characters */ }
+
+%%
+
+int main() {
+    printf("Enter code or text to analyze (Ctrl+D to finish):\n");
+    yylex();
+    printf("\nSummary:\n");
+    printf("Integer Constants: %d\n", int_constants);
+    printf("Floating-Point Constants: %d\n", float_constants);
+    printf("Character Constants: %d\n", char_constants);
+    printf("String Literals: %d\n", string_literals);
+    return 0;
+}

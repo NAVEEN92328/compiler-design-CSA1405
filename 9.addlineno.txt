@@ -1,0 +1,18 @@
+%{
+#include <stdio.h>
+
+int line_number = 1;  // Initialize line counter
+%}
+
+%%
+.*\n    { printf("%d: %s", line_number++, yytext); }  // Prefix each line with its number
+.        { printf("%d: %s", line_number++, yytext); }  // Handle last line if no newline
+%%
+
+int yywrap(void) { return 1; }
+
+int main() {
+    printf("Enter the input text (Ctrl+D to end):\n");
+    yylex();  // Start processing input
+    return 0;
+}

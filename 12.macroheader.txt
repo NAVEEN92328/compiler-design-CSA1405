@@ -1,0 +1,36 @@
+%{
+#include <stdio.h>
+
+int macro_count = 0;  // Counter for macros
+int header_count = 0; // Counter for header files
+%}
+
+%%
+
+"#define"[ \t]+[A-Za-z_][A-Za-z0-9_]*    { 
+    macro_count++; 
+}
+
+"#include"[ \t]+<[^>]+>                   { 
+    header_count++; 
+}
+
+"#include"[ \t]+\"[^\"]+\"                 { 
+    header_count++; 
+}
+
+%%
+
+int main(int argc, char *argv[]) {
+    yylex();  // This function starts Lex's lexical analysis
+
+    // Print the total number of macros and header files
+    printf("Total Macros Defined: %d\n", macro_count);
+    printf("Total Header Files Included: %d\n", header_count);
+    
+    return 0;
+}
+
+int yywrap() {
+    return 1;
+}
